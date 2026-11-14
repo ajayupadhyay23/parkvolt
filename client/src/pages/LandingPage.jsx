@@ -33,7 +33,8 @@ import {
   CreditCard,
   QrCode,
   Sliders,
-  HelpCircle
+  HelpCircle,
+  Sparkles
 } from "lucide-react";
 import FloatingCityScene from "../components/3d/FloatingCityScene";
 import { useBooking } from "../context/BookingContext";

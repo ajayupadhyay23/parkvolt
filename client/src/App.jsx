@@ -38,40 +38,82 @@ import WalletPage from "./pages/WalletPage";
 import AuthPage from "./pages/AuthPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error, errorInfo) {
+    console.error("ParkVolt App Error Boundary Caught:", error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: "40px 20px", maxWidth: "600px", margin: "80px auto", textAlign: "center", fontFamily: "sans-serif" }}>
+          <h2 style={{ fontSize: "24px", color: "#EF4444", marginBottom: "16px" }}>Something went wrong</h2>
+          <p style={{ color: "#64748B", marginBottom: "24px" }}>
+            {this.state.error?.message || "An unexpected error occurred while rendering the page."}
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              padding: "10px 24px",
+              backgroundColor: "#2F6BFF",
+              color: "#fff",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontWeight: "600"
+            }}
+          >
+            Reload ParkVolt
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export default function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <BookingProvider>
-          <BrowserRouter>
-            {/* Main Application Layout */}
-            <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-              <Navbar />
+    <ErrorBoundary>
+      <ThemeProvider>
+        <AuthProvider>
+          <BookingProvider>
+            <BrowserRouter>
+              {/* Main Application Layout */}
+              <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+                <Navbar />
 
-              <main style={{ flex: 1 }}>
-                <Routes>
-                  <Route path="/" element={<LandingPage />} />
-                  <Route path="/find-parking" element={<FindParkingPage />} />
-                  <Route path="/parking/:id" element={<ParkingDetailPage />} />
-                  <Route path="/find-ev" element={<FindEvChargingPage />} />
-                  <Route path="/checkout" element={<CheckoutPage />} />
-                  <Route path="/ticket/:id" element={<BookingTicketPage />} />
-                  <Route path="/my-bookings" element={<MyBookingsPage />} />
-                  <Route path="/wallet" element={<WalletPage />} />
-                  <Route path="/login" element={<AuthPage />} />
-                  <Route path="/register" element={<AuthPage />} />
-                  <Route path="/404" element={<NotFoundPage />} />
-                  <Route path="*" element={<Navigate to="/404" replace />} />
-                </Routes>
-              </main>
+                <main style={{ flex: 1 }}>
+                  <Routes>
+                    <Route path="/" element={<LandingPage />} />
+                    <Route path="/find-parking" element={<FindParkingPage />} />
+                    <Route path="/parking/:id" element={<ParkingDetailPage />} />
+                    <Route path="/find-ev" element={<FindEvChargingPage />} />
+                    <Route path="/checkout" element={<CheckoutPage />} />
+                    <Route path="/ticket/:id" element={<BookingTicketPage />} />
+                    <Route path="/my-bookings" element={<MyBookingsPage />} />
+                    <Route path="/wallet" element={<WalletPage />} />
+                    <Route path="/login" element={<AuthPage />} />
+                    <Route path="/register" element={<AuthPage />} />
+                    <Route path="/404" element={<NotFoundPage />} />
+                    <Route path="*" element={<Navigate to="/404" replace />} />
+                  </Routes>
+                </main>
 
-              <Footer />
-              <BottomNav />
-              <ToastNotifications />
-            </div>
-          </BrowserRouter>
-        </BookingProvider>
-      </AuthProvider>
-    </ThemeProvider>
+                <Footer />
+                <BottomNav />
+                <ToastNotifications />
+              </div>
+            </BrowserRouter>
+          </BookingProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }
