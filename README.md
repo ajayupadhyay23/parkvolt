@@ -1,106 +1,152 @@
-# ParkVolt – Smart Parking & EV Charging Mesh System
+# ParkVolt – Smart Parking & EV Charging Finder
 
-> **A high-performance IoT Smart Parking Reservation and Electric Vehicle Charging Grid Digital-Twin Platform.**  
-> Built with **React 18, Three.js (WebGL), Tailwind CSS, Zustand, Node.js, Express.js, MongoDB/Mongoose, Socket.IO, JWT, and Razorpay HMAC-SHA256 Payment Integration.**
+A simple, attractive 3D web application built with **React 18 + Vite**, **plain CSS with CSS variables**, **Three.js with @react-three/fiber & @react-three/drei**, and **qrcode.react**.
+
+Built for modern web browsers and designed specifically for easy demonstration in a **B.Tech Computer Science viva**.
 
 ---
 
-## 🚀 Quick Start Guide
+## 🚀 How to Run on macOS
 
-### 1. Install Dependencies
+Open your macOS Terminal and execute the following commands:
+
 ```bash
-# Install frontend packages
-cd client && npm install
+# 1. Navigate to the client folder
+cd "/Users/ajay/Downloads/INT259  CA2/client"
 
-# Install backend packages
-cd ../server && npm install
-```
+# 2. Install dependencies (already pre-installed)
+npm install
 
-### 2. Start the Backend API & WebSocket Gateway
-```bash
-cd server
-npm start
-```
-* Backend starts at `http://localhost:5001`
-* Health Check: `GET http://localhost:5001/api/health`
-* Socket.IO Gateway attached to `http://localhost:5001`
-
-### 3. Start the Frontend Client (Vite Dev Server)
-```bash
-cd client
+# 3. Start the Vite development server
 npm run dev
 ```
-* Open your browser at `http://localhost:3000`
 
----
+The app will start immediately at:  
+👉 **[http://localhost:3000](http://localhost:3000)**
 
-## 🏛️ Project Architecture & Modules
-
-```
-ParkVolt/
-├── client/                     # Frontend Application (React 18 + Vite + Three.js)
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── 3d/             # MiniatureCity WebGL digital-twin & HUD telemetry overlay
-│   │   │   ├── hero/           # Hero section with interactive 3D miniature city
-│   │   │   ├── layout/         # Navbar, Footer
-│   │   │   └── ui/             # Atomic design components (Button, Badge, Card, Input, Modal, SlotIndicator)
-│   │   ├── pages/
-│   │   │   ├── ExploreSearch.jsx       # Step 3: Geospatial search & EV filter matrix
-│   │   │   ├── LocationDetailView.jsx  # Step 4: Multi-floor layout & visual slot reservation grid
-│   │   │   ├── EVChargingDashboard.jsx # Step 10: High-voltage telemetry & live BMS curve
-│   │   │   ├── AdminDashboard.jsx      # Step 11: Real-time grid operator console
-│   │   │   └── DesignSystemShowcase.jsx# Step 1: Design tokens & interactive UI lab
-│   │   ├── services/           # REST API client & mock fallback provider
-│   │   └── store/              # Zustand global state (slots, user, telemetry, Socket.IO)
-│
-└── server/                     # Backend API & IoT Socket Server (Node.js + Express + Mongoose)
-    ├── config/                 # Environment variables and MongoDB connection
-    ├── controllers/            # Auth, User, Parking, Booking, Payment, Charging controllers
-    ├── middleware/             # JWT protect, RBAC authorize, input validation, global error handler
-    ├── models/                 # Mongoose schemas (User, Vehicle, Location, Slot, Booking, Payment, Session)
-    ├── routes/                 # REST endpoints (/api/auth, /api/parking, /api/bookings, etc.)
-    ├── services/               # Concurrency slot locker, Razorpay signature verifier, notifications
-    ├── sockets/                # Socket.IO facility rooms & real-time slot broadcast gateway
-    └── utils/                  # JWT token generator, unique booking ID generator, pricing calculator
+To create an optimized production build:
+```bash
+npm run build
 ```
 
 ---
 
-## 📡 API Reference Overview
+## 📄 Complete List of Pages (All 10 Routes)
 
-| Method | Endpoint | Description | Auth Required |
-|:---|:---|:---|:---|
-| `GET` | `/api/health` | Service health, uptime & status | No |
-| `POST` | `/api/auth/register` | Register new user account | No |
-| `POST` | `/api/auth/login` | Authenticate with email/password & receive JWT | No |
-| `GET` | `/api/auth/me` | Retrieve profile of authenticated user | Yes (`Bearer <token>`) |
-| `GET` | `/api/parking` | Search facilities by city, power kW, max rate | No |
-| `GET` | `/api/parking/:id/slots` | Fetch real-time slot layout by facility & floor | No |
-| `PATCH`| `/api/parking/slots/:id/status`| Update slot status (available/occupied/maintenance) | Admin / Operator |
-| `POST` | `/api/bookings` | Reserve a bay (atomic concurrency lock) | Yes |
-| `GET` | `/api/bookings/my` | Retrieve bookings of authenticated user | Yes |
-| `PATCH`| `/api/bookings/:id/cancel` | Cancel booking & automatically release bay | Yes |
-| `POST` | `/api/payments/create-order` | Generate Razorpay order ID | Yes |
-| `POST` | `/api/payments/verify` | Verify HMAC-SHA256 signature and record payment | Yes |
-| `POST` | `/api/charging/start` | Start high-voltage EV fast-charging session | Yes |
-| `GET` | `/api/charging/:id/telemetry` | Poll real-time kW, SOC %, voltage, amperage | Yes |
-| `POST` | `/api/charging/:id/stop` | Conclude session and release connector lock | Yes |
+| # | Route | Page Name | Key Capabilities |
+|---|---|---|---|
+| **1** | `/` | **Landing Page** | 3D Hero island scene, animated vehicles & pedestrians, search box, live statistics, featured places, 4-step "How It Works", pricing tiers in INR (₹), FAQ accordion, and footer. |
+| **2** | `/find-parking` | **Find Parking** | Interactive search, filters (price range, city, availability, amenities), location cards with real photos, live free slot counts, hourly rates, and opening hours. |
+| **3** | `/parking/:id` | **Parking Detail** | Photo gallery, interactive 3D slot picker (Green = free, Red = taken with 3D car, Blue = selected), start time & duration picker (30m to 24h), dynamic 18% GST calculation, and Google Maps directions link. |
+| **4** | `/find-ev` | **Find EV Charging** | Real-time filters by connector type (Type 2, CCS2, CHAdeMO, Bharat AC001, Bharat DC001), charging speed (kW), hourly rate, and live status badges. |
+| **5** | `/checkout` | **Checkout** | Booking order summary, mock payment modes (UPI ID, Credit/Debit Card, ParkVolt Wallet), double-booking collision prevention, input validation, and animated confirmation screen. |
+| **6** | `/ticket/:id` | **Booking Ticket** | Live QR code generated via `qrcode.react`, active countdown timer, "+30 Mins" extension button, and instant cancel with wallet refund. |
+| **7** | `/my-bookings` | **My Bookings** | Segmented tabs for `Upcoming`, `Active`, and `Past` reservations, persistent across sessions. |
+| **8** | `/wallet` | **Digital Wallet** | Live INR balance display, one-click quick top-up buttons (₹200, ₹500, ₹1000), and transaction history log. |
+| **9** | `/login` & `/register` | **Authentication** | Client-side SHA-256 Web Crypto password hashing, form validation, pre-seeded demo user (`alex@parkvolt.com` / `password123`), and session persistence in `localStorage`. |
+| **10** | `*` | **404 Not Found** | Clean error page with navigation shortcuts back to safety. |
 
 ---
 
-## ⚡ Concurrency & Double-Booking Prevention
+## 🎨 Visual Design & Theme System
 
-1. **Atomic Check & Lock**: When `POST /api/bookings` is invoked, the `bookingService` checks if `slot.status === 'available'`.
-2. **Immediate State Transition**: The slot status is immediately transitioned to `'reserved'` and linked to the new `booking._id`.
-3. **Socket.IO Broadcast**: A `slot:status_changed` event is broadcasted to the facility room (`io.to(locationId)`), instantly painting the slot red/amber across all connected user devices in `< 25ms`.
-4. **Grace Period**: If payment is not completed within 15 minutes, a scheduled task automatically releases the slot back to `'available'`.
+- **Tesla / Airbnb Modern Aesthetic**: Rounded cards (`14px` - `20px` radius), soft elevation shadows, crisp whitespace, and sticky navigation.
+- **Typography**: Google Font **Plus Jakarta Sans** with clean numerical hierarchy.
+- **Theme Modes (Light / Dark / Auto)**:
+  - **Light Mode**: High-contrast, daylight palette (`#F8FAFC` background).
+  - **Dark Mode**: Cyber nightscape (`#070C1F` background).
+  - **Auto Mode**: Listens live to your Mac's system appearance (`prefers-color-scheme`) and switches automatically without a page reload.
+  - **Interactive 3D Scene Adaptation**: The 3D city scene lighting, sky gradient, building window glows, and streetlights dynamically adjust to light or dark mode in real time.
+- **Color Palette**:
+  - Primary Blue: `#2F6BFF`
+  - Violet Accent: `#7C5CFF`
+  - Success Green: `#12B76A`
+  - Warning Amber: `#F59E0B`
+  - Danger Red: `#EF4444`
 
 ---
 
-## 🎓 University Viva Highlights
+## 💡 What Parts Are Mocked? (Viva Explanation)
 
-1. **Why Three.js + WebGL?**: Allows rendering 60 FPS 3D spatial models directly in the browser using the client's GPU, without streaming video overhead.
-2. **Raycasting**: Translates 2D mouse clicks on the canvas into 3D ray intersections to identify the exact bay clicked by the driver.
-3. **HMAC-SHA256 Signature Verification**: Computes `crypto.createHmac('sha256', secret).update(orderId + '|' + paymentId)` and compares using `crypto.timingSafeEqual` to prevent timing attacks and unauthorized order confirmation.
-4. **Atomic Design & Zustand**: Segregates UI into reusable atoms/molecules while keeping state updates out of React component trees for sub-millisecond render efficiency.
+For a clean, standalone frontend project that runs anywhere without requiring external database servers or third-party paid API keys:
+
+1. **No External Backend or Database**:
+   - Initial parking locations and EV charging stations are loaded from clean JSON files (`src/data/parkingLocations.json` and `src/data/evStations.json`).
+   - All user reservations, active sessions, saved favorites, and wallet balances are stored directly in the browser's `localStorage`.
+2. **Real-time Availability Simulation**:
+   - Every 4 seconds, a timer background worker slightly shifts slot availability up or down to simulate live IoT sensors.
+   - A visible **"Simulated data"** badge is proudly displayed in the top navigation and on cards, transparently informing users.
+3. **Double-Booking Collision Prevention Algorithm**:
+   - In `BookingContext.jsx`, whenever a reservation is attempted, the system compares the requested slot and time range against all existing active bookings to guarantee no slot is double-booked for overlapping windows.
+4. **Mock Payment Gateway**:
+   - Supports simulated **UPI**, **Credit/Debit Card**, and **ParkVolt Wallet** payment flows with real client-side regex format validation (e.g., `user@upi` and 16-digit card numbers) labeled clearly with a **"Demo payment – No real money is charged"** badge.
+5. **Client-Side SHA-256 Auth**:
+   - Passwords are securely hashed directly in the browser using the native Web Cryptography API (`crypto.subtle.digest('SHA-256', ...)`) before being compared with stored credentials.
+
+---
+
+## 📁 Project Folder Structure (In Simple English)
+
+```text
+client/
+├── public/
+│   └── images/                     # Real, high-resolution parking & EV photos
+│       ├── airport.jpg             # Aerocity Terminal 3 Parking
+│       ├── ev-charge.jpg           # EV plugged into charging cable
+│       ├── ev-fast.jpg             # 150 kW DC Fast Charging Hub
+│       ├── ev-station.jpg          # Commercial EV charging plaza
+│       ├── mall.jpg                # Ambience Mall underground parking
+│       ├── multistorey.jpg         # Cyber Hub Multi-Storey Garage
+│       ├── street.jpg              # Connaught Place smart street bays
+│       └── underground.jpg         # One BKC Corporate Basement
+├── src/
+│   ├── components/
+│   │   ├── 3d/
+│   │   │   └── FloatingCityScene.jsx  # Interactive 3D Canvas (R3F + Drei)
+│   │   ├── common/
+│   │   │   └── ToastNotifications.jsx # Floating toast alerts (Booking, Extension, etc.)
+│   │   └── layout/
+│   │       ├── BottomNav.jsx          # Mobile bottom navigation bar
+│   │       ├── Footer.jsx             # Comprehensive footer with INR notes & links
+│   │       └── Navbar.jsx             # Top bar with Logo, Search, Theme toggle & Balance
+│   ├── context/
+│   │   ├── AuthContext.jsx         # Web Crypto SHA-256 login, register & session state
+│   │   ├── BookingContext.jsx      # Double-booking check, 4s simulation & tickets
+│   │   └── ThemeContext.jsx        # Light / Dark / Auto system theme manager
+│   ├── data/
+│   │   ├── evStations.json         # EV charging locations (CCS2, Type 2, Bharat DC)
+│   │   └── parkingLocations.json   # Parking facilities in Gurugram, Delhi, Mumbai, BLR
+│   ├── pages/
+│   │   ├── AuthPage.jsx            # /login and /register forms
+│   │   ├── BookingTicketPage.jsx   # /ticket/:id with live QR code & countdown
+│   │   ├── CheckoutPage.jsx        # /checkout payment simulation & validation
+│   │   ├── FindEvChargingPage.jsx  # /find-ev connector & speed filter matrix
+│   │   ├── FindParkingPage.jsx     # /find-parking search, filter & card view
+│   │   ├── LandingPage.jsx         # / hero 3D island, stats, steps & FAQ
+│   │   ├── MyBookingsPage.jsx      # /my-bookings upcoming, active & past tabs
+│   │   ├── NotFoundPage.jsx        # /404 page
+│   │   ├── ParkingDetailPage.jsx   # /parking/:id with 3D slot picker & pricing
+│   │   └── WalletPage.jsx          # /wallet balance and top-up chips
+│   ├── styles/
+│   │   └── main.css                # Pure CSS design system with CSS custom properties
+│   ├── App.jsx                     # Route definitions & Context providers wrapping
+│   └── main.jsx                    # React 18 DOM mount point
+├── index.html                      # HTML entry with Plus Jakarta Sans font
+├── package.json                    # Dependencies & scripts
+└── vite.config.js                  # Vite bundler configuration (Port 3000)
+```
+
+---
+
+## 📸 Image Credits
+
+All images used in this project are licensed for free commercial and personal use from **Unsplash**:
+
+1. `multistorey.jpg`: Photo by CHUTTERSNAP on Unsplash (Multi-level concrete parking structure).
+2. `underground.jpg`: Photo by Michael Fousert on Unsplash (Underground basement garage with LED guidance).
+3. `street.jpg`: Photo by John Matychuk on Unsplash (Urban curbside smart parking bays).
+4. `mall.jpg`: Photo by Alex Suprun on Unsplash (Shopping mall parking facility).
+5. `ev-fast.jpg`: Photo by CHUTTERSNAP on Unsplash (High-speed DC electric vehicle charging station).
+6. `ev-station.jpg`: Photo by Sophie Louisnave on Unsplash (Modern solar-canopy EV charging park).
+7. `ev-charge.jpg`: Photo by Ernest Ojeh on Unsplash (Electric vehicle plugged in with glowing indicator).
+8. `airport.jpg`: Photo by Artur Tumasjan on Unsplash (Airport terminal long-stay parking zone).

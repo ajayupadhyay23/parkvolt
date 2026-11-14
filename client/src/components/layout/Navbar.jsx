@@ -1,160 +1,361 @@
-import React, { useState } from "react";
-import { Zap, Menu, X, ShieldCheck, Compass, Sparkles, User, Layers, Activity } from "lucide-react";
-import { Button } from "../ui/Button";
-import { Badge } from "../ui/Badge";
-
 /**
- * Navbar Component
- * Global top navigation bar with brand identity, live status, navigation links, and view switchers.
+ * Navbar.jsx
+ * Responsive navigation bar with brand logo, links, Theme Toggle (Light/Dark/Auto),
+ * live simulated status badge, and user auth state.
  */
-export const Navbar = ({ currentView, onOpenAuth, onNavigate }) => {
+import React, { useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import {
+  Zap,
+  Car,
+  BookmarkCheck,
+  Wallet,
+  User,
+  Sun,
+  Moon,
+  Monitor,
+  Menu,
+  X,
+  Sparkles,
+  LogOut
+} from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
+import { useAuth } from "../../context/AuthContext";
+import { useBooking } from "../../context/BookingContext";
+
+export default function Navbar() {
+  const { themePreference, changeTheme, isDark } = useTheme();
+  const { currentUser, isAuthenticated, logout } = useAuth();
+  const { bookings } = useBooking();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navLinks = [
-    { id: "home", label: "3D City Twin" },
-    { id: "explore", label: "Explore Hubs" },
-    { id: "charging", label: "EV Telemetry", icon: <Zap className="w-3 h-3 text-cyan-400" /> },
-    { id: "admin", label: "Admin Grid" },
-    { id: "design-system", label: "Design Tokens" }
-  ];
+  const activeBookingsCount = bookings.filter((b) => b.status === "active").length;
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/[0.08] bg-[#080C14]/85 backdrop-blur-xl transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+    <header
+      style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 100,
+        backgroundColor: "var(--bg-surface)",
+        borderBottom: "1px solid var(--border-subtle)",
+        backdropFilter: "blur(12px)",
+        transition: "var(--transition)"
+      }}
+    >
+      <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "72px" }}>
         {/* Brand Logo */}
-        <div
-          onClick={() => onNavigate?.("home")}
-          className="flex items-center gap-2.5 cursor-pointer group"
-        >
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-400 p-[1.5px] shadow-glow-emerald group-hover:scale-105 transition-transform duration-200">
-            <div className="h-full w-full bg-[#080C14] rounded-[10px] flex items-center justify-center">
-              <Zap className="h-5 w-5 text-emerald-400 fill-emerald-400/20 group-hover:text-emerald-300 transition-colors" />
-            </div>
+        <Link to="/" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div
+            style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "12px",
+              background: "linear-gradient(135deg, #2F6BFF 0%, #7C5CFF 50%, #12B76A 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#FFF",
+              boxShadow: "0 4px 14px rgba(47, 107, 255, 0.35)"
+            }}
+          >
+            <Zap size={22} fill="currentColor" />
           </div>
           <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-xl tracking-tight text-white">
-                PARK<span className="text-emerald-400">VOLT</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <span style={{ fontSize: "20px", fontWeight: "800", letterSpacing: "-0.5px" }}>
+                Park<span style={{ color: "var(--color-primary)" }}>Volt</span>
               </span>
-              <span className="text-[10px] uppercase font-mono tracking-widest px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                v1.0
+              <span className="badge badge-green" style={{ fontSize: "10px", padding: "2px 6px" }}>
+                v2.0
               </span>
             </div>
-            <p className="text-[10px] text-slate-400 font-medium tracking-wide">
-              SMART PARKING & EV INFRASTRUCTURE
+            <p style={{ fontSize: "10px", color: "var(--text-muted)", fontWeight: "500" }}>
+              Smart Parking & EV Finder
             </p>
           </div>
-        </div>
+        </Link>
 
         {/* Desktop Nav Links */}
-        <nav className="hidden md:flex items-center gap-1 bg-slate-900/60 p-1.5 rounded-full border border-white/[0.06] backdrop-blur-md">
-          {navLinks.map((link) => (
-            <button
-              key={link.id}
-              onClick={() => onNavigate?.(link.id)}
-              className={`px-3.5 py-1.5 text-xs font-semibold rounded-full transition-all flex items-center gap-1.5 ${
-                currentView === link.id
-                  ? "bg-emerald-500 text-slate-950 font-bold shadow-md"
-                  : "text-slate-300 hover:text-white hover:bg-white/[0.06]"
-              }`}
-            >
-              {link.icon}
-              <span>{link.label}</span>
-            </button>
-          ))}
+        <nav style={{ display: "flex", alignItems: "center", gap: "4px" }} className="desktop-nav">
+          <NavLink
+            to="/"
+            style={({ isActive }) => ({
+              padding: "8px 14px",
+              borderRadius: "var(--radius-md)",
+              fontSize: "14px",
+              fontWeight: "600",
+              color: isActive ? "var(--color-primary)" : "var(--text-secondary)",
+              background: isActive ? "var(--color-primary-light)" : "transparent"
+            })}
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/find-parking"
+            style={({ isActive }) => ({
+              padding: "8px 14px",
+              borderRadius: "var(--radius-md)",
+              fontSize: "14px",
+              fontWeight: "600",
+              color: isActive ? "var(--color-primary)" : "var(--text-secondary)",
+              background: isActive ? "var(--color-primary-light)" : "transparent"
+            })}
+          >
+            Find Parking
+          </NavLink>
+          <NavLink
+            to="/find-ev"
+            style={({ isActive }) => ({
+              padding: "8px 14px",
+              borderRadius: "var(--radius-md)",
+              fontSize: "14px",
+              fontWeight: "600",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              color: isActive ? "var(--color-green)" : "var(--text-secondary)",
+              background: isActive ? "var(--color-green-light)" : "transparent"
+            })}
+          >
+            <Zap size={14} /> EV Charging
+          </NavLink>
+          <NavLink
+            to="/my-bookings"
+            style={({ isActive }) => ({
+              padding: "8px 14px",
+              borderRadius: "var(--radius-md)",
+              fontSize: "14px",
+              fontWeight: "600",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              color: isActive ? "var(--color-primary)" : "var(--text-secondary)",
+              background: isActive ? "var(--color-primary-light)" : "transparent"
+            })}
+          >
+            <BookmarkCheck size={14} /> Bookings
+            {activeBookingsCount > 0 && (
+              <span className="badge badge-green" style={{ padding: "1px 6px", fontSize: "10px" }}>
+                {activeBookingsCount}
+              </span>
+            )}
+          </NavLink>
+          <NavLink
+            to="/wallet"
+            style={({ isActive }) => ({
+              padding: "8px 14px",
+              borderRadius: "var(--radius-md)",
+              fontSize: "14px",
+              fontWeight: "600",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              color: isActive ? "var(--color-primary)" : "var(--text-secondary)",
+              background: isActive ? "var(--color-primary-light)" : "transparent"
+            })}
+          >
+            <Wallet size={14} /> Wallet
+          </NavLink>
         </nav>
 
-        {/* Live System Pill & Action Buttons */}
-        <div className="hidden lg:flex items-center gap-3">
-          <Badge variant="emerald" size="sm" dot>
-            Socket Gateway Online
-          </Badge>
+        {/* Action Controls & Theme Toggle */}
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          {/* Simulated Data Badge */}
+          <div className="simulated-pill" title="Live availability simulated for demonstration purposes">
+            <span className="sim-dot" />
+            <span className="desktop-only">Simulated Data</span>
+          </div>
 
-          <Button
-            variant="outline"
-            size="sm"
-            icon={<User className="w-4 h-4 text-slate-400" />}
-            onClick={() => onOpenAuth?.("login")}
+          {/* Theme Selector (Light / Dark / Auto) */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              backgroundColor: "var(--bg-subtle)",
+              borderRadius: "var(--radius-full)",
+              padding: "3px",
+              border: "1px solid var(--border-subtle)"
+            }}
           >
-            Alex (DL 01 EV)
-          </Button>
+            <button
+              type="button"
+              onClick={() => changeTheme("light")}
+              title="Light theme"
+              style={{
+                padding: "6px",
+                borderRadius: "50%",
+                color: themePreference === "light" ? "var(--color-primary)" : "var(--text-muted)",
+                backgroundColor: themePreference === "light" ? "var(--bg-surface)" : "transparent",
+                boxShadow: themePreference === "light" ? "var(--shadow-sm)" : "none",
+                display: "flex"
+              }}
+            >
+              <Sun size={15} />
+            </button>
+            <button
+              type="button"
+              onClick={() => changeTheme("auto")}
+              title="Auto: follow device theme live"
+              style={{
+                padding: "6px",
+                borderRadius: "50%",
+                color: themePreference === "auto" ? "var(--color-primary)" : "var(--text-muted)",
+                backgroundColor: themePreference === "auto" ? "var(--bg-surface)" : "transparent",
+                boxShadow: themePreference === "auto" ? "var(--shadow-sm)" : "none",
+                display: "flex"
+              }}
+            >
+              <Monitor size={15} />
+            </button>
+            <button
+              type="button"
+              onClick={() => changeTheme("dark")}
+              title="Dark theme"
+              style={{
+                padding: "6px",
+                borderRadius: "50%",
+                color: themePreference === "dark" ? "var(--color-primary)" : "var(--text-muted)",
+                backgroundColor: themePreference === "dark" ? "var(--bg-surface)" : "transparent",
+                boxShadow: themePreference === "dark" ? "var(--shadow-sm)" : "none",
+                display: "flex"
+              }}
+            >
+              <Moon size={15} />
+            </button>
+          </div>
 
-          <Button
-            variant="primary"
-            size="sm"
-            icon={<Sparkles className="w-4 h-4" />}
-            onClick={() => onNavigate?.("explore")}
-          >
-            Find Slots
-          </Button>
-        </div>
+          {/* User Account Button */}
+          {isAuthenticated ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }} className="desktop-only">
+              <Link
+                to="/wallet"
+                className="btn btn-outline btn-sm"
+                style={{ display: "flex", alignItems: "center", gap: "6px" }}
+              >
+                <User size={14} />
+                <span>{currentUser.name.split(" ")[0]}</span>
+                <span className="badge badge-blue" style={{ padding: "1px 6px" }}>
+                  ₹{currentUser.walletBalance}
+                </span>
+              </Link>
+              <button
+                type="button"
+                onClick={logout}
+                title="Log out"
+                style={{
+                  padding: "8px",
+                  borderRadius: "var(--radius-sm)",
+                  color: "var(--text-muted)",
+                  display: "flex"
+                }}
+              >
+                <LogOut size={16} />
+              </button>
+            </div>
+          ) : (
+            <Link to="/login" className="btn btn-primary btn-sm desktop-only">
+              Sign In
+            </Link>
+          )}
 
-        {/* Mobile Hamburger Button */}
-        <div className="flex md:hidden items-center gap-2">
+          {/* Mobile Menu Hamburger */}
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-xl text-slate-400 hover:text-white bg-slate-900/60 border border-white/10"
-            aria-label="Toggle Navigation Menu"
+            className="mobile-only"
+            style={{
+              padding: "8px",
+              borderRadius: "var(--radius-sm)",
+              color: "var(--text-main)",
+              display: "none"
+            }}
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-white/[0.08] bg-[#0B101D] px-4 pt-3 pb-6 space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b border-white/5">
-            <Badge variant="emerald" size="sm" dot>
-              Socket Gateway Online
-            </Badge>
-          </div>
-          <div className="flex flex-col gap-1.5">
-            {navLinks.map((link) => (
-              <button
-                key={link.id}
-                onClick={() => {
-                  onNavigate?.(link.id);
-                  setMobileMenuOpen(false);
-                }}
-                className={`text-left px-3 py-2 text-sm rounded-lg flex items-center gap-2 ${
-                  currentView === link.id
-                    ? "bg-emerald-500/20 text-emerald-400 font-bold"
-                    : "text-slate-300 hover:bg-white/5"
-                }`}
-              >
-                {link.icon}
-                <span>{link.label}</span>
-              </button>
-            ))}
-          </div>
-          <div className="pt-2 flex flex-col gap-2">
-            <Button
-              variant="outline"
-              size="md"
-              className="w-full justify-center"
+        <div
+          style={{
+            padding: "16px 20px 24px",
+            backgroundColor: "var(--bg-surface)",
+            borderTop: "1px solid var(--border-subtle)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px"
+          }}
+        >
+          <Link
+            to="/"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ padding: "10px 14px", fontWeight: "600" }}
+          >
+            Home
+          </Link>
+          <Link
+            to="/find-parking"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ padding: "10px 14px", fontWeight: "600" }}
+          >
+            Find Parking
+          </Link>
+          <Link
+            to="/find-ev"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ padding: "10px 14px", fontWeight: "600" }}
+          >
+            Find EV Charging
+          </Link>
+          <Link
+            to="/my-bookings"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ padding: "10px 14px", fontWeight: "600" }}
+          >
+            My Bookings ({bookings.length})
+          </Link>
+          <Link
+            to="/wallet"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ padding: "10px 14px", fontWeight: "600" }}
+          >
+            Wallet (₹{currentUser ? currentUser.walletBalance : 0})
+          </Link>
+          {isAuthenticated ? (
+            <button
               onClick={() => {
-                onOpenAuth?.("login");
+                logout();
                 setMobileMenuOpen(false);
               }}
+              className="btn btn-outline"
+              style={{ marginTop: "10px" }}
             >
-              Alex Rivera (Account)
-            </Button>
-            <Button
-              variant="primary"
-              size="md"
-              className="w-full justify-center"
-              onClick={() => {
-                onNavigate?.("explore");
-                setMobileMenuOpen(false);
-              }}
+              Sign Out ({currentUser.name})
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              onClick={() => setMobileMenuOpen(false)}
+              className="btn btn-primary"
+              style={{ marginTop: "10px" }}
             >
-              Explore Smart Bays
-            </Button>
-          </div>
+              Sign In / Register
+            </Link>
+          )}
         </div>
       )}
+
+      {/* Mobile CSS Inline rules */}
+      <style>{`
+        @media (max-width: 820px) {
+          .desktop-nav { display: none !important; }
+          .desktop-only { display: none !important; }
+          .mobile-only { display: flex !important; }
+        }
+      `}</style>
     </header>
   );
-};
+}
