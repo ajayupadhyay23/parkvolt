@@ -17,7 +17,7 @@
  * 10. *             -> NotFoundPage (404 Error handler)
  */
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext";
 import { BookingProvider } from "./context/BookingContext";
@@ -84,7 +84,7 @@ export default function App() {
       <ThemeProvider>
         <AuthProvider>
           <BookingProvider>
-            <BrowserRouter basename={import.meta.env.BASE_URL}>
+            <HashRouter>
               {/* Main Application Layout */}
               <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
                 <Navbar />
@@ -110,7 +110,7 @@ export default function App() {
                 <BottomNav />
                 <ToastNotifications />
               </div>
-            </BrowserRouter>
+            </HashRouter>
           </BookingProvider>
         </AuthProvider>
       </ThemeProvider>
