@@ -312,6 +312,10 @@ export default function LandingPage() {
                   src={loc.image}
                   alt={loc.altText}
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&w=800&q=80";
+                  }}
                 />
                 <div
                   style={{

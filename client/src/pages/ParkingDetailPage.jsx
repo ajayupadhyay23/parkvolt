@@ -165,6 +165,10 @@ export default function ParkingDetailPage() {
               src={location.image}
               alt={location.altText}
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&w=800&q=80";
+              }}
             />
             <div
               style={{

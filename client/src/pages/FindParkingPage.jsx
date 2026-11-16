@@ -209,6 +209,10 @@ export default function FindParkingPage() {
                     src={loc.image}
                     alt={loc.altText}
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&w=800&q=80";
+                    }}
                   />
                   {/* City Badge & Peak Hours */}
                   <div style={{ position: "absolute", top: "12px", left: "12px", display: "flex", gap: "6px" }}>

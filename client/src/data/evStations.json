@@ -12,7 +12,7 @@
     "currentOutputKw": 0,
     "voltage": 480,
     "currentAmps": 312,
-    "image": "/images/ev-fast.jpg",
+    "image": "./images/ev-fast.jpg",
     "altText": "Modern high-power CCS2 dual-gun electric vehicle DC fast charger with digital touchscreen"
   },
   {
@@ -28,7 +28,7 @@
     "currentOutputKw": 46.2,
     "voltage": 400,
     "currentAmps": 115,
-    "image": "/images/ev-charge.jpg",
+    "image": "./images/ev-charge.jpg",
     "altText": "Electric car charging at a commercial CHAdeMO fast charging station"
   },
   {
@@ -44,7 +44,7 @@
     "currentOutputKw": 0,
     "voltage": 440,
     "currentAmps": 272,
-    "image": "/images/ev-station.jpg",
+    "image": "./images/ev-station.jpg",
     "altText": "EV charging station bay marked with bright green road paint and clear signage"
   },
   {
@@ -60,7 +60,7 @@
     "currentOutputKw": 0,
     "voltage": 415,
     "currentAmps": 32,
-    "image": "/images/ev-charge.jpg",
+    "image": "./images/ev-charge.jpg",
     "altText": "Type 2 AC wallbox charger connected to an electric car with a glowing cable indicator"
   },
   {
@@ -76,7 +76,7 @@
     "currentOutputKw": 0,
     "voltage": 230,
     "currentAmps": 15,
-    "image": "/images/underground.jpg",
+    "image": "./images/underground.jpg",
     "altText": "Underground parking bay equipped with Bharat AC001 compliant public charger"
   },
   {
@@ -92,7 +92,7 @@
     "currentOutputKw": 14.8,
     "voltage": 72,
     "currentAmps": 200,
-    "image": "/images/mall.jpg",
+    "image": "./images/mall.jpg",
     "altText": "Bharat DC001 charging pedestal installed in a shopping mall outdoor parking deck"
   },
   {
@@ -108,7 +108,7 @@
     "currentOutputKw": 0,
     "voltage": 450,
     "currentAmps": 266,
-    "image": "/images/ev-fast.jpg",
+    "image": "./images/ev-fast.jpg",
     "altText": "High-speed CCS2 charger unit in an airport long-stay parking lot with illuminated display"
   }
 ]
