@@ -84,7 +84,7 @@ export default function App() {
       <ThemeProvider>
         <AuthProvider>
           <BookingProvider>
-            <BrowserRouter>
+            <BrowserRouter basename={import.meta.env.BASE_URL}>
               {/* Main Application Layout */}
               <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
                 <Navbar />
